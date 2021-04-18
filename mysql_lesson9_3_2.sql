@@ -1,0 +1,26 @@
+DROP TRIGGER IF EXISTS `shop`.`products_BEFORE_INSERT`;
+
+DELIMITER $$
+USE `shop`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `shop`.`products_BEFORE_INSERT` BEFORE INSERT ON `products` FOR EACH ROW
+BEGIN
+	IF ((ISNULL(NEW.name) + ISNULL(NEW.description)) > 1) THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'name and description not filled';
+    END IF;
+END$$
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS `shop`.`products_BEFORE_UPDATE`;
+
+DELIMITER $$
+USE `shop`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `shop`.`products_BEFORE_UPDATE` BEFORE UPDATE ON `products` FOR EACH ROW
+BEGIN
+	IF ((ISNULL(NEW.name) + ISNULL(NEW.description)) > 1) THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'name and description not filled';
+    END IF;
+END$$
+DELIMITER ;
+
